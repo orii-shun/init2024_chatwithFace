@@ -1,1 +1,1 @@
-# init2024_janken
+# init2024_wordwolf

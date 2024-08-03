@@ -10,6 +10,7 @@ const io = socketIo(server);
 
 app.use(express.static('public'));
 
+/*
 let connectedClients = 0;
 let ready_count = 0;
 let janken_type_count = 0;
@@ -61,6 +62,7 @@ io.on('connection', (socket) => {
             connectedClients, socket.id);
     });
 });
+*/
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

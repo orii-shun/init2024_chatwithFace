@@ -9,35 +9,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
-import { GestureRecognizer, FilesetResolver } from "./vision_bundle.js";
+import { FaceLandmarker, FilesetResolver } from "./vision_bundle.js";
 document.getElementById("message").innerHTML = "Loading model...";
-let gestureRecognizer = undefined;
-let runningMode = "VIDEO";
+let faceLandmarker = undefined;
+let runningMode = "IMAGE";
 let enableWebcamButton;
 let webcamRunning = false;
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
-const createGestureRecognizer = async () => {
-    const vision = await FilesetResolver.forVisionTasks(
-        "./wasm"
-    );
-    gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+const createFaceLandmarker = async () => {
+    const vision = await FilesetResolver.forVisionTasks("./wasm");
+    faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
         baseOptions: {
-            modelAssetPath:
-            //    "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",//モデルを外部に置いている場合
-                "../models/gesture_recognizer.task",//public/models内にモデルを置いている場合
-                // "./js/gesture_recognizer.task",//js内にモデルを置いている場合
+            modelAssetPath: `../models/face_landmarker.task`,
             delegate: "GPU"
         },
+        outputFaceBlendshapes: true,
         runningMode: runningMode,
-        numHands: 2
+        numFaces: 1
     });
     document.getElementById("message").innerHTML += "done";
     document.querySelector('#webcamButton').disabled = false;
 };
-createGestureRecognizer();
-
+createFaceLandmarker();
 /********************************************************************
 // Demo 2: Continuously grab image from webcam stream and detect it.
 ********************************************************************/
@@ -57,8 +52,8 @@ else {
 }
 // Enable the live webcam view and start detection.
 function enableCam(event) {
-    if (!gestureRecognizer) {
-        console.log("Wait! model file of Gesture Recognizer is not loaded yet.");
+    if (!FaceLandmarker) {
+        console.log("Wait! objectDetector not loaded yet.");
         return;
     }
     if (webcamRunning === true) {
@@ -81,20 +76,20 @@ function enableCam(event) {
 }
 let lastVideoTime = -1;
 let results = undefined;
-
+console.log(video);
 async function predictWebcam() {
 
     // Now let's start detecting the stream.
     if (runningMode === "IMAGE") {
         runningMode = "VIDEO";
-        await gestureRecognizer.setOptions({ runningMode: "VIDEO" });
+        await faceLandmarker.setOptions({ runningMode: "VIDEO" });
     }
     let startTimeMs = performance.now();
     if (lastVideoTime !== video.currentTime) {
         lastVideoTime = video.currentTime;
-        results = gestureRecognizer.recognizeForVideo(video, startTimeMs);
+        results = faceLandmarker.detectForVideo(video, startTimeMs);
     }
-    gotGestures(results);
+    gotFaces(results);
     // canvasCtx.save();
     // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     // if (results.landmarks) {
