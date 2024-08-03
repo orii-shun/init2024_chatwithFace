@@ -11,6 +11,8 @@ function setup() {
   }
 }
 
+
+
 function draw() {
   // 描画処理
  //clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
@@ -30,7 +32,9 @@ function draw() {
     }
   }
 
+
 }
+
 
 function windowResized() {
   adjustCanvas();
