@@ -27,11 +27,25 @@ function draw() {
       for (let landmark of landmarks) {
         fill(0);
         noStroke();
-        circle(landmark.x * width, landmark.y * height, 5);
+        circle(mouseX + (landmark.x * width/2) - width/4, mouseY/2 + (landmark.y * height/2) , 6);
+        
       }
     }
   }
+  
+  for (let chat of chats) {
+    if (chat.life > 0) {
+    fill(0);
+    text(chat.text, mouseX, mouseY/2  - 20);
+    chat.life -= 1;
+  }
+  else {
+    chats.splice(chats.indexOf(chat),1);
 
+  }
+
+
+}
 
 }
 
@@ -44,5 +58,5 @@ function adjustCanvas() {
   // Get an element by its ID
   var element_webcam = document.getElementById('webcam');
   resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
-  //console.log(element_webcam.clientWidth);
+  //console.log(element_webcam.clientWidth, element_webcam.clientHeight);
 }
