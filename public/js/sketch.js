@@ -33,22 +33,13 @@ function draw() {
         let posx = mouseX + (landmark.x * width/2) - width/4;
         let posy = mouseY/2 + (landmark.y * height/2);
            circle(posx,posy, 6);
-        socket.emit('landmark', {x: posx, y: posy});
+      
       }
     }
   }
 
   
 
-  socket.on('landmark', ({x: posx, y: posy}) => {
-    fill(0);
-    noStroke();
-   circle(x,y, 6);
-  });
-  
-
-
-    
   
   for (let chat of chats) {
     if (chat.life > 0) {
