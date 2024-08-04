@@ -18,6 +18,9 @@ function draw() {
  //clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
   background(255);
 
+
+
+
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
@@ -27,18 +30,32 @@ function draw() {
       for (let landmark of landmarks) {
         fill(0);
         noStroke();
-        circle(mouseX + (landmark.x * width/2) - width/4, mouseY/2 + (landmark.y * height/2) , 6);
-        
+        let posx = mouseX + (landmark.x * width/2) - width/4;
+        let posy = mouseY/2 + (landmark.y * height/2);
+           circle(posx,posy, 6);
+        socket.emit('landmark', {x: posx, y: posy});
       }
     }
   }
+
+  
+
+  socket.on('landmark', ({x: posx, y: posy}) => {
+    fill(0);
+    noStroke();
+   circle(x,y, 6);
+  });
+  
+
+
+    
   
   for (let chat of chats) {
     if (chat.life > 0) {
     fill(0);
     textSize(50);
     textAlign(CENTER, CENTER);
-    text("\\" + chat.text + "/", mouseX , mouseY/2 + chat.life * 0.05 +50);
+    text("\\" + chat.text + "/", mouseX , mouseY/2 + chat.life * 0.05 +10);
     chat.life -= 1;
   }
   else {

@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const { sourceMapsEnabled } = require('process');
 const socketIo = require('socket.io');
 
 const app = express();
@@ -10,17 +11,30 @@ app.use(express.static('public'));
 
 
 
+
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('a user connected', socket.id);
+        
+    io.emit('entered', );
+    });
+
+    
 
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     });
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
+    socket.on('landmark', ({x: posx, y: posy}) => {
+        io.emit('landmark', {x: posx, y: posy});
     });
-});
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected', socket.id);
+        
+          io.emit('exited', );
+     
+    });
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

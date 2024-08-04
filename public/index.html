@@ -17,8 +17,10 @@
 
 <body>
 
-    <h1>WordWolf</h1>
+    <h1>Chat with Face</h1>
     <p id="message"></p>
+    
+
 
 
  
@@ -52,15 +54,20 @@ function send() {
   }
 }
 
+socket.on( 'connect',() => {
+        console.log( socket.id );
+    } );
+
+
 let chats = [];
 
 
 socket.on('chat message', function(msg) {//socket.onは送信がされたら＝受信
   var item = document.createElement('li');
   item.textContent = `${msg.text}(from${msg.name})`;
-  item.style.color = msg.color;
+  //item.style.color = msg.color;
   document.getElementById('messages').appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
+  //window.scrollTo(0, document.body.scrollHeight);
 
   chats.push({
     text: msg.text,
@@ -68,11 +75,18 @@ socket.on('chat message', function(msg) {//socket.onは送信がされたら＝�
     x: random(width),
     y: random(height),
     life: 511
-  }
-)
-
-
+  })
 });
+
+ 
+ socket.on('entered',()=> {
+    document.getElementById('notion').innerText = `誰かが入室しました`;
+  });
+
+  socket.on('exited', () => {
+    document.getElementById('notion').innerText = `誰かが退室しました`;
+  });
+
 
 // Enterキーでsend()関数を呼び出す
 input.addEventListener('keypress', function(event) {
@@ -92,6 +106,7 @@ input.addEventListener('keypress', function(event) {
           <div class="col">
             <div class="card">
               <div class="card-body">
+                <p id="notion"></p>
     <button id="webcamButton" disabled>
       ENABLE WEBCAM
     </button>
@@ -116,11 +131,15 @@ input.addEventListener('keypress', function(event) {
 
 
 
-    <!-- include js libraries -->
+    
+    <!--
     <script src="./js/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="./js/hands.js" crossorigin="anonymous"></script>
+   
+    <script src="./js/p5.sound.js"></script>-->
+
     <script src="./js/p5.js"></script>
-    <script src="./js/p5.sound.js"></script>
+
     <script src="./js/sketch.js"></script>
     <script type="module" src="./js/script.js"></script>
 
@@ -133,3 +152,4 @@ input.addEventListener('keypress', function(event) {
   </body>
 
 </html>
+
