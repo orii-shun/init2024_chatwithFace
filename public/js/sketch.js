@@ -36,7 +36,9 @@ function draw() {
   for (let chat of chats) {
     if (chat.life > 0) {
     fill(0);
-    text(chat.text, mouseX, mouseY/2  - 20);
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("\\" + chat.text + "/", mouseX , mouseY/2 + chat.life * 0.05 +50);
     chat.life -= 1;
   }
   else {
